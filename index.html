@@ -1,0 +1,66 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wheel of Fortune</title>
+  <link rel="stylesheet" href="css/style.css">
+  <meta name="description" content="A simple wheel of fortune application">
+
+  <meta property="og:title" content="Wheel of Fortune">
+  <meta property="og:type" content="">
+  <meta property="og:url" content="">
+  <meta property="og:image" content="">
+  <meta property="og:image:alt" content="">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.png">
+
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="theme-color" content="#fafafa">
+</head>
+
+<body>
+  <div class="container">
+    <h1>Wheel of Fortune</h1>
+
+    <div class="entry-section">
+      <h2>Add Entries</h2>
+      <div class="entry-form">
+        <input type="text" id="entry-input" placeholder="Enter a new item">
+        <button id="add-entry-btn">Add</button>
+      </div>
+
+      <div class="entries-list">
+        <h3>Current Entries:</h3>
+        <ul id="entries">
+          <li data-color="#FF5252">First</li>
+          <li data-color="#4CAF50">Bateau</li>
+          <li data-color="#2196F3">Maison</li>
+          <li data-color="#FFC107">Losange</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="wheel-section">
+      <div class="wheel-container">
+        <canvas id="wheel" width="400" height="400"></canvas>
+        <button id="spin-btn">GO</button>
+      </div>
+    </div>
+
+    <div id="result-popup" class="popup hidden">
+      <div class="popup-content">
+        <h2>You Won!</h2>
+        <p id="result-text"></p>
+        <button id="close-popup">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+
+</html>
