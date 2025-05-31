@@ -9,6 +9,13 @@ document.addEventListener('DOMContentLoaded', function() {
   const closePopupBtn = document.getElementById('close-popup');
   const canvas = document.getElementById('wheel');
   const ctx = canvas.getContext('2d');
+  const spinDurationInput = document.getElementById('spin-duration');
+
+  // Audio Elements
+  const spinningSound = new Audio('Sounds/spinning.ogg');
+  spinningSound.loop = true;
+  const backgroundMusic = new Audio('Sounds/Cyberpunk Moonlight Sonata v2.mp3');
+  const headshotSound = new Audio('Sounds/headshot.wav');
 
   // Wheel properties
   let spinning = false;
@@ -171,7 +178,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     spinning = true;
     spinStartTime = Date.now();
-    spinDuration = 3000 + Math.random() * 2000; // 3-5 seconds
+
+    // Get spinning duration from input (convert to milliseconds)
+    const durationInSeconds = parseInt(spinDurationInput.value) || 5; // Default to 5 if invalid
+    spinDuration = durationInSeconds * 1000;
 
     // Calculate target rotation (at least 5 full rotations + random position on the circle)
     const segmentAngle = (2 * Math.PI) / entries.length;
@@ -180,6 +190,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // This allows the wheel to stop anywhere on the circle, not just at specific points
     const randomAngle = Math.random() * segmentAngle;
     targetRotation = currentRotation + (5 * 2 * Math.PI) + (randomSegment * segmentAngle) + randomAngle;
+
+    // Play sounds
+    spinningSound.currentTime = 0;
+    spinningSound.play();
+    backgroundMusic.currentTime = 0;
+    backgroundMusic.play();
 
     // Start animation
     requestAnimationFrame(updateSpin);
@@ -202,6 +218,14 @@ document.addEventListener('DOMContentLoaded', function() {
       currentRotation -= 2 * Math.PI;
     }
 
+    // Adjust spinning sound playback rate based on wheel speed
+    // Start at normal speed (1.0) and slow down to 0.5 as the wheel slows down
+    if (spinning && progress < 1) {
+      // Calculate playback rate: 1.0 at the start, decreasing to 0.5 at the end
+      const playbackRate = 1.0 - (0.5 * easeOut(progress));
+      spinningSound.playbackRate = playbackRate;
+    }
+
     // Redraw wheel
     drawWheel();
 
@@ -211,6 +235,10 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
       // Animation complete
       spinning = false;
+
+      // Stop spinning sound
+      spinningSound.pause();
+      spinningSound.currentTime = 0;
 
       // Determine winner
       const entries = getEntries();
@@ -229,9 +257,17 @@ document.addEventListener('DOMContentLoaded', function() {
     resultText.textContent = winner.text;
     resultText.style.backgroundColor = winner.color;
     resultPopup.classList.remove('hidden');
+
+    // Play headshot sound when the winning popup opens
+    headshotSound.currentTime = 0;
+    headshotSound.play();
   }
 
   function closePopup() {
     resultPopup.classList.add('hidden');
+
+    // Stop background music
+    backgroundMusic.pause();
+    backgroundMusic.currentTime = 0;
   }
 });
